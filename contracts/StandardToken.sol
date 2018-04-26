@@ -16,11 +16,16 @@ contract StandardToken is Token {
     function transfer(address _to, uint256 _value) returns (bool success) {
        
         //require(balances[msg.sender] >= _value && balances[_to] + _value > balances[_to]);
-        require(balances[msg.sender] >= _value);
-        balances[msg.sender] -= _value;
-        balances[_to] += _value;
-        Transfer(msg.sender, _to, _value);
-        return true;
+        //require(balances[msg.sender] >= _value);
+	if(balances[msg.sender] >= _value && _value > 0){
+		balances[msg.sender] -= _value;
+        	balances[_to] += _value;
+        	Transfer(msg.sender, _to, _value);
+        	return true;
+	}else{
+		return false;
+	}
+       
     }
 
 
@@ -28,12 +33,16 @@ contract StandardToken is Token {
     (bool success) {
         //require(balances[_from] >= _value && allowed[_from][msg.sender] >= 
         // _value && balances[_to] + _value > balances[_to]);
-        require(balances[_from] >= _value && allowed[_from][msg.sender] >= _value);
-        balances[_to] += _value;
-        balances[_from] -= _value; 
-        allowed[_from][msg.sender] -= _value;
-        Transfer(_from, _to, _value);
-        return true;
+        //require(balances[_from] >= _value && allowed[_from][msg.sender] >= _value);
+        if (balances[_from] >= _value && allowed[_from][msg.sender] >= _value && _value > 0) {
+        	balances[_to] += _value;
+        	balances[_from] -= _value; 
+        	allowed[_from][msg.sender] -= _value;
+        	Transfer(_from, _to, _value);
+        	return true;
+	}else{
+		return false;
+	}
     }
     function balanceOf(address _owner) constant returns (uint256 balance) {
         return balances[_owner];
